@@ -1,6 +1,6 @@
 import * as admin from 'firebase-admin'
 import * as functions from 'firebase-functions';
-import { logPurchase, reportErrors } from './helpers/index';
+import { logPurchase, logErrors } from './helpers/index';
 import { EventContext } from 'firebase-functions/lib/cloud-functions';
 import { DocumentSnapshot } from 'firebase-functions/lib/providers/firestore';
 
@@ -16,7 +16,7 @@ export const someFunctionWithError = functions.https.onRequest(async (request, r
       message: `I'm useless 😔`
     })
   } catch (error) {
-    await reportErrors(error)
+    await logErrors(error)
     response.status(500).send({
       message: `Something went wrong, our developers were informed.`
     })
@@ -43,7 +43,7 @@ export const processOrder = purchaseRef.onCreate(async (snap: DocumentSnapshot, 
      */
     return logPurchase(payload) 
   } catch (err) {
-    return reportErrors(err, { order })
+    return logErrors(err, { order })
   }
 });
  

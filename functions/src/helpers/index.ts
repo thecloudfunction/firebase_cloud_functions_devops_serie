@@ -1,9 +1,9 @@
 import { report } from '../logs/index';
 
-export const reportErrors = (event: any, context: any = {}) => {
-  return report(`errors`)(event, context)
-}
-
+/**
+ * logs for error
+ */
+export const logErrors = (event: any, context: any = {}) => report(`errors`)(event, context)
 /**
  * custom log for purchase
  */

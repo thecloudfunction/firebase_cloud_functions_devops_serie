@@ -5,8 +5,8 @@ Different practices for devops management when using firebase projects (limited 
 ## Content
 1) [CI/CD with Cloud Build](https://thecloudfunction.com/blog/firebase-cloud-functions-continuous-deploying-with-cloud-build/)
 2) [Slack Notifications](https://thecloudfunction.com/blog/slack-notifications-cloud-build/)
-3) [Logging Aggregation]()
-4) [Firestore Backup]()
+3) [Logging Aggregation](https://thecloudfunction.com/blog/firebase-cloud-function-logging-aggregation/)
+4) Firestore Backup **soon**
 5) Disaster Recovery **soon**
 
 ## License
