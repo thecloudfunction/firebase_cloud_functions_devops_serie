@@ -1,6 +1,6 @@
 import * as admin from 'firebase-admin'
 import * as functions from 'firebase-functions';
-import { logPurchase, logErrors } from './helpers/index';
+import { logPurchase, logErrors, sendBuildNotification } from './helpers/index';
 import { EventContext } from 'firebase-functions/lib/cloud-functions';
 import { DocumentSnapshot } from 'firebase-functions/lib/providers/firestore';
 
