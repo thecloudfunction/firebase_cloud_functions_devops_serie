@@ -1,0 +1,28 @@
+steps:
+- name: 'gcr.io/$PROJECT_ID/firebase'
+  args: [ 'use', '$_PROJECT_NAME']
+  secretEnv: ['FIREBASE_TOKEN']
+
+- name: 'gcr.io/cloud-builders/npm'
+  dir: 'functions'
+  args: ['install']
+
+# Deploy firestore secutiry rules
+- name: 'gcr.io/$PROJECT_ID/firebase'
+  args: [ 'deploy', '--only', 'firestore:rules']
+  secretEnv: ['FIREBASE_TOKEN']
+  
+# Deploy firestore indexes
+- name: 'gcr.io/$PROJECT_ID/firebase'
+  args: [ 'deploy', '--only', 'firestore:indexes']
+  secretEnv: ['FIREBASE_TOKEN']
+
+# Deploy cloud functions
+- name: 'gcr.io/$PROJECT_ID/firebase'
+  args: [ 'deploy', '--only', 'functions']
+  secretEnv: ['FIREBASE_TOKEN']
+
+secrets:
+- kmsKeyName: 'projects/{YOUR_PROJECT_ID}/locations/global/keyRings/{YOUR_RING_NAME}/cryptoKeys/{YOUR_KEY_NAME}'
+  secretEnv:
+    FIREBASE_TOKEN: YOUR_BASE64_TOKEN_HERE
