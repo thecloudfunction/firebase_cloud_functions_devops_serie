@@ -7,6 +7,13 @@ import { DocumentSnapshot } from 'firebase-functions/lib/providers/firestore';
 admin.initializeApp()
 
 /**
+ * Notifies slack when a build process is completed
+ */
+export const sendSlackMessage = functions.pubsub
+    .topic(`cloud-builds`)
+    .onPublish(sendBuildNotification)
+
+/**
  * Example of catching errors
  */
 export const someFunctionWithError = functions.https.onRequest(async (request, response) => {
