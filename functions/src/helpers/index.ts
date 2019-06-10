@@ -1,11 +1,11 @@
-import * as functions from 'firebase-functions'
+// import * as functions from 'firebase-functions'
 
 import { report } from '../logs/index';
 import { includes, isNil, merge } from 'lodash';
-import { IncomingWebhook }  from '@slack/client'
+// import { IncomingWebhook }  from '@slack/client'
 
-const environment = functions.config()
-const webhook = new IncomingWebhook(environment.slack.deploymentWebhook)
+// const environment = functions.config()
+// const webhook = new IncomingWebhook(environment.slack.deploymentWebhook)
 
 /**
  * logs for error
