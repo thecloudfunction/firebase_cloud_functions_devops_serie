@@ -11,7 +11,7 @@ admin.initializeApp()
  * Automated Backups
  */
 export const automatedBackups = functions.pubsub
-    .schedule('0 */24 * * *')
+    .schedule('0 0 * * *')
     .onRun(generateBackup)
     
 
