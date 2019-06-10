@@ -20,7 +20,7 @@ export const logPurchase =  (payload: any): Promise<any> => report(`purchase`)(`
  * Assemble a generic slack message
  */
 type Colors = `green` | `red` | `yellow`
-const _createSlackessage = (config: { title: string, color: Colors, fields: Array<any>, url?: string, footer?: string, footer_icon?: string }) => {
+export const _createSlackessage = (config: { title: string, color: Colors, fields: Array<any>, url?: string, footer?: string, footer_icon?: string }) => {
   const defaults = { url: null, footer: null, footer_icon: null }
   return merge(defaults, config)
 }

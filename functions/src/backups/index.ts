@@ -1,5 +1,13 @@
+import * as functions from 'firebase-functions'
 import * as dateformat from 'dateformat'
 import { auth } from 'google-auth-library'
+import { backupSlackNotification } from '../helpers';
+
+import { IncomingWebhook }  from '@slack/client'
+import { logErrors } from '../helpers/index';
+
+const environment = functions.config()
+const webhook = new IncomingWebhook(environment.slack.deploymentWebhook)
 
 export const generateBackup = async () => {
   const client = await auth.getClient({
@@ -21,10 +29,15 @@ export const generateBackup = async () => {
     data: {
         outputUriPrefix: backup_route
     }
-  }).then(res => {
+  }).then(async (res) => {
     console.log(`Backup saved on folder on ${backup_route}`)
+    // @ts-ignore
+    await webhook.send(backupSlackNotification(`completed`))
   })
-  .catch(e => {
-    console.log(e.message)
+  .catch(async (e) => {
+    await logErrors(e, { message: e.message })
+    // @ts-ignore
+    await webhook.send(backupSlackNotification(`error`))
+    return Promise.reject({ message: e.message })
   })
 }

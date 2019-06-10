@@ -1,6 +1,6 @@
 import * as admin from 'firebase-admin'
 import * as functions from 'firebase-functions';
-import { logPurchase, logErrors } from './helpers/index';
+import { logPurchase, logErrors, sendBuildNotification } from './helpers/index';
 import { EventContext } from 'firebase-functions/lib/cloud-functions';
 import { DocumentSnapshot } from 'firebase-functions/lib/providers/firestore';
 import { generateBackup } from './backups/index';
@@ -13,14 +13,13 @@ admin.initializeApp()
 export const automatedBackups = functions.pubsub
     .schedule('0 0 * * *')
     .onRun(generateBackup)
-    
 
 /**
  * Notifies slack when a build process is completed
  */
-// export const sendSlackMessage = functions.pubsub
-//     .topic(`cloud-builds`)
-//     .onPublish(sendBuildNotification)
+export const sendSlackMessage = functions.pubsub
+    .topic(`cloud-builds`)
+    .onPublish(sendBuildNotification)
 
 /**
  * Example of catching errors
