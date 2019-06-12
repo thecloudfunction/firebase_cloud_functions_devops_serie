@@ -5,8 +5,7 @@
         "type": "Delete"
       },
       "condition": {
-        "age": 3,
-        "isLive": true
+        "age": 3
       }
     }]
   }

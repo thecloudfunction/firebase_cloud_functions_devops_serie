@@ -1,4 +1,4 @@
-import * as functions from 'firebase-functions'
+ import * as functions from 'firebase-functions'
 import * as dateformat from 'dateformat'
 import { auth } from 'google-auth-library'
 import { backupSlackNotification } from '../helpers';
@@ -32,12 +32,48 @@ export const generateBackup = async () => {
   }).then(async (res) => {
     console.log(`Backup saved on folder on ${backup_route}`)
     // @ts-ignore
-    await webhook.send(backupSlackNotification(`completed`))
+    //await webhook.send(backupSlackNotification(`completed`))
   })
   .catch(async (e) => {
     await logErrors(e, { message: e.message })
     // @ts-ignore
-    await webhook.send(backupSlackNotification(`error`))
+    // await webhook.send(backupSlackNotification(`error`))
+    return Promise.reject({ message: e.message })
+  })
+}
+
+export const restoreBackup = async () => {
+  const client = await auth.getClient({
+    scopes: [
+      'https://www.googleapis.com/auth/datastore',
+      'https://www.googleapis.com/auth/cloud-platform'
+    ]
+  })
+  const yesterday = new Date
+  yesterday.setDate(yesterday.getDate() - 1)
+  const timestamp = dateformat(yesterday, 'yyyy-mm-dd')
+  const path = `${timestamp}`
+  const BUCKET_NAME = `devops101-backup`
+
+  const projectId = await auth.getProjectId()
+  const url = `https://firestore.googleapis.com/v1beta1/projects/${projectId}/databases/(default):importDocuments`
+  const backup_route = `gs://${BUCKET_NAME}/${path}`
+  return client.request({
+    url,
+    method: 'POST',
+    data: {
+        inputUriPrefix: backup_route,
+        // collectionIds: [] // if you want to import only certain collections
+    }
+  }).then(async (res) => {
+    console.log(`Backup restored from folder ${backup_route}`)
+    // @ts-ignore
+    await webhook.send(backupSlackNotification(`completed`, `Restored`))
+  })
+  .catch(async (e) => {
+    await logErrors(e, { message: e.message })
+    // @ts-ignore
+    await webhook.send(backupSlackNotification(`error`, `Restored`))
     return Promise.reject({ message: e.message })
   })
 }
