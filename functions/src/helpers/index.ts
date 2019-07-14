@@ -20,7 +20,7 @@ export const logPurchase =  (payload: any): Promise<any> => report(`purchase`)(`
  * Assemble a generic slack message
  */
 type Colors = `green` | `red` | `yellow`
-export const _createSlackessage = (config: { title: string, color: Colors, fields: Array<any>, url?: string, footer?: string, footer_icon?: string }) => {
+export const createSlackessage = (config: { title: string, color: Colors, fields: Array<any>, url?: string, footer?: string, footer_icon?: string }) => {
   const defaults = { url: null, footer: null, footer_icon: null }
   return merge(defaults, config)
 }
@@ -31,7 +31,7 @@ export const _createSlackessage = (config: { title: string, color: Colors, field
 export const createSlackMessageBuildMessage = (event: any) => {
   const DEFAULT = `blue`
   const STATUS_COLOR: any = { QUEUED: DEFAULT, WORKING: DEFAULT, SUCCESS: `green`, FAILURE: `red`, TIMEOUT: `yellow`, INTERNAL_ERROR: `red` }
-  return _createSlackessage ({
+  return createSlackessage ({
     title: 'GCP Build 👻',
     color: STATUS_COLOR[event.status] || DEFAULT,
     fields: [{
@@ -61,3 +61,17 @@ export const sendBuildNotification = async (message: any) => {
     return Promise.reject({ error: error.message })
   }
 }
+
+/**
+ * Slack notification for Backups
+ */
+export const backupSlackNotification = (status: string, type: string = `Saved`) => createSlackessage({
+  title: `Firestore Backup ${type}🚔`,
+  color: status === `completed` ? `green` : `red`,
+  fields: [{
+    title: `Backups`,
+    value: `completed`
+  }],
+  footer: 'Google Cloud Build',
+  footer_icon: 'https://ssl.gstatic.com/pantheon/images/containerregistry/container_registry_color.png',  
+})

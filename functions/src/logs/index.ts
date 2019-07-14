@@ -2,7 +2,15 @@ const { Logging } = require('@google-cloud/logging')
 
 const logging = new Logging()
 
-export const report = (logName: string = `errors`) => (eventInfo: any, context = {}) => {
+type Severity = `debug` | `critical` | `emergency` | `alert` | `error` | `warning` | `write`
+
+/**
+ * @param eventInfo Information about the envent
+ * @param context Object based params with information about the event
+ * @param severity Use to identify the type of log, implements Severity
+ * @param delegate User email in charge of the event
+ */
+export const report = (logName: string = `errors`) => (eventInfo: any, context = {}, severity: Severity = `error`, delegate: string | null = null) => {
   const log = logging.log(logName)
 
   // This is common to all projects
@@ -22,10 +30,11 @@ export const report = (logName: string = `errors`) => (eventInfo: any, context =
     context: Object.assign({}, context, {
       stack: eventInfo.stack ? eventInfo.stack : null,
     }),
+    delegate
   }
 
   return new Promise((resolve, reject) => {
-    log.write(log.entry(metadata, event), (error: any) => {
+    log[severity](log.entry(metadata, event), (error: any) => {
       if (error) {
        reject(error)
       }

@@ -3,7 +3,7 @@ import * as functions from 'firebase-functions';
 import { logPurchase, logErrors, sendBuildNotification } from './helpers/index';
 import { EventContext } from 'firebase-functions/lib/cloud-functions';
 import { DocumentSnapshot } from 'firebase-functions/lib/providers/firestore';
-import { generateBackup } from './backups/index';
+import { generateBackup, restoreBackup } from './backups/index';
 
 admin.initializeApp()
 
@@ -13,6 +13,10 @@ admin.initializeApp()
 export const automatedBackups = functions.pubsub
     .schedule('0 0 * * *')
     .onRun(generateBackup)
+
+export const automatedRestore = functions.pubsub
+  .topic(`restore-backup`)
+  .onPublish(restoreBackup)
 
 /**
  * Notifies slack when a build process is completed

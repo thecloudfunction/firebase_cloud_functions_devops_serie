@@ -1,13 +1,13 @@
- import * as functions from 'firebase-functions'
+// import * as functions from 'firebase-functions'
 import * as dateformat from 'dateformat'
 import { auth } from 'google-auth-library'
-import { backupSlackNotification } from '../helpers';
+// import { backupSlackNotification } from '../helpers';
 
-import { IncomingWebhook }  from '@slack/client'
+// import { IncomingWebhook }  from '@slack/client'
 import { logErrors } from '../helpers/index';
 
-const environment = functions.config()
-const webhook = new IncomingWebhook(environment.slack.deploymentWebhook)
+// const environment = functions.config()
+// const webhook = new IncomingWebhook(environment.slack.deploymentWebhook)
 
 export const generateBackup = async () => {
   const client = await auth.getClient({
@@ -68,12 +68,12 @@ export const restoreBackup = async () => {
   }).then(async (res) => {
     console.log(`Backup restored from folder ${backup_route}`)
     // @ts-ignore
-    await webhook.send(backupSlackNotification(`completed`, `Restored`))
+    // await webhook.send(backupSlackNotification(`completed`, `Restored`))
   })
   .catch(async (e) => {
     await logErrors(e, { message: e.message })
     // @ts-ignore
-    await webhook.send(backupSlackNotification(`error`, `Restored`))
+    // await webhook.send(backupSlackNotification(`error`, `Restored`))
     return Promise.reject({ message: e.message })
   })
 }
