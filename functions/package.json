@@ -19,8 +19,8 @@
     "@types/gapi": "0.0.36",
     "axios": "^0.19.0",
     "dateformat": "^3.0.3",
-    "firebase-admin": "~7.0.0",
-    "firebase-functions": "^2.3.0",
+    "firebase-admin": "~11.4.1",
+    "firebase-functions": "^4.1.1",
     "google-auth-library": "^4.2.0",
     "googleapis": "^40.0.0",
     "lodash": "^4.17.13"
